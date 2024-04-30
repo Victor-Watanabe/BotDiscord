@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ui import Button
+#from google_sheet import email_states
 
 # Lógica do Formulário de Email
 class email_form(discord.ui.Modal):
@@ -9,7 +10,10 @@ class email_form(discord.ui.Modal):
 
     email_input = discord.ui.TextInput(label="Email", placeholder="Exemplo: Exemplo@gmail.com")
     async def on_submit(self, interect:discord.Interaction):
-        await interect.response.send_message(f"Email informado {self.email_input}", ephemeral = True)
+        global email
+        email = self.email_input
+        await interect.response.send_message(f"Email informado {email}", ephemeral = True)
+        #print(email_states)
 
 intents = discord.Intents.default()
 
@@ -76,7 +80,4 @@ async def on_ready():
 # Identificando o Bot com o Token de Acesso e Colocando o bot para funcionar!
 bot.run("MTIzMDYwMDE2NDg0MzE5MjM1NQ.Gix1Vw.gFCOcnfI2pVzLNOOE2YaKssvCfUo-0KPG4xJXs")
 
-
-# Verificar lógica de programação para apresentar um comando de input após pressionado botão.
-# Verificar como funciona o armazenamento da variável 
 # Estudar como utilizar a API do google Sheets
