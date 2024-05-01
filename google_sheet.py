@@ -1,6 +1,4 @@
 import os.path
-
-#from bot import email
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -12,10 +10,14 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # The ID and range of a sample spreadsheet.
 SAMPLE_SPREADSHEET_ID = "18kaJLF0OBLkMNS9fKx4Q_HPYQZ37So91-NXr7WURL2c"
-SAMPLE_RANGE_NAME = "WorkSheet!C1:C9"
+SAMPLE_RANGE_NAME = "WorkSheet!C2:C"
 
+global email_states
 
-def main():
+def string_sublist(sublist):
+      return ' '.join(map(str, sublist))
+
+def main(email):
 
   creds = None
   
@@ -43,20 +45,32 @@ def main():
         .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME)
         .execute()
     )
-    print (result)
-    #if email in SAMPLE_RANGE_NAME:
-     # global email_states
-      #email_states = True
+    values = result.get("values", [])
+
+    print (values)
+    print(email)
     
-    #else:
-     # global email_states
-      #email_states = False
-      
-  
+    # Mapear cada sublista para uma string usando map
+    string_list = list(map(string_sublist, values))
+    print(string_list)
+
+    if values:
+        if email in string_list:
+            print("SEU EMAIL ESTÁ CADASTRADO")
+            #gravar na tabela!!
+            return True
+        else:
+            print("SEU EMAIL NÃO ESTÁ CADASTRADO")
+            return False
+    else:
+        print("Nenhum dado retornado.")
+    
   except HttpError as err:
     print(err)
 
+# Exibir o resultado
 
 if __name__ == "__main__":
   main()
 
+# pegar o index + 1 para acrescentar o número da linha.
