@@ -1,19 +1,20 @@
 import discord
 from discord.ext import commands
 from discord.ui import Button
-#from google_sheet import email_states
+from google_sheet import main
 
 # Lógica do Formulário de Email
 class email_form(discord.ui.Modal):
     def __init__(self):
         super().__init__(title="Email de Aquisição do Curso.")
 
-    email_input = discord.ui.TextInput(label="Email", placeholder="Exemplo: Exemplo@gmail.com")
+    email_input = discord.ui.TextInput(label="Email", placeholder="Exemplo: Exemplo@gmail.com", custom_id="email_field")
     async def on_submit(self, interect:discord.Interaction):
         global email
-        email = self.email_input
+        email = self.email_input.value
         await interect.response.send_message(f"Email informado {email}", ephemeral = True)
-        #print(email_states)
+        reply = main(email)
+        print(reply)
 
 intents = discord.Intents.default()
 
@@ -29,8 +30,8 @@ bot = commands.Bot(command_prefix="/", intents=intents)
 # Criando Comando Responsivo à Mensagem "ola"
 @bot.command()
 async def ola(ctx: commands.Context):
-    usuario = ctx.author
-    await ctx.reply(f"Hello {usuario.display_name}!")
+    user = ctx.author
+    await ctx.reply(f"Hello {user.display_name}!")
 
 # Criando Embed para Boas Vindas do Usuário
 @bot.event
