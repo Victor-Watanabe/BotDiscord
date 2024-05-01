@@ -3,6 +3,7 @@ from discord.ext import commands
 from discord.ui import Button
 from google_sheet import main
 
+
 # Lógica do Formulário de Email
 class email_form(discord.ui.Modal):
     def __init__(self):
@@ -10,10 +11,17 @@ class email_form(discord.ui.Modal):
 
     email_input = discord.ui.TextInput(label="Email", placeholder="Exemplo: Exemplo@gmail.com", custom_id="email_field")
     async def on_submit(self, interect:discord.Interaction):
+        user = interect.user
         global email
         email = self.email_input.value
-        await interect.response.send_message(f"Email informado {email}", ephemeral = True)
         reply = main(email)
+        if reply == False:
+            await interect.response.send_message(f"Senhor {user}, o email {email} NÃO foi localizado no banco de dados, Favor entre em contato com o nosso canal de Suporte!", ephemeral = True)
+        else:
+            role = user.guild.get_role(1230596024041607220)
+            
+            await user.add_roles(role)
+            await interect.response.send_message(f"Senhor {user}, seu Cadastro foi Concluído, Bem Vindo a Nossa Comunidade!", ephemeral = True)
         print(reply)
 
 intents = discord.Intents.default()
@@ -82,3 +90,5 @@ async def on_ready():
 bot.run("MTIzMDYwMDE2NDg0MzE5MjM1NQ.Gix1Vw.gFCOcnfI2pVzLNOOE2YaKssvCfUo-0KPG4xJXs")
 
 # Estudar como utilizar a API do google Sheets
+# LEMBRAR DE ALTERAR TODOS OS ID DE COMANDO 
+# ORIENTAR O LUCAS DE COLOCAR OS CARGOS EM ORDEM DE DOMINIO!
