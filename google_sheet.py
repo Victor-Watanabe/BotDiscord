@@ -17,7 +17,7 @@ global email_states
 def string_sublist(sublist):
       return ' '.join(map(str, sublist))
 
-def main(email):
+def main(email, username):
 
   creds = None
   
@@ -46,6 +46,7 @@ def main(email):
         .execute()
     )
     values = result.get("values", [])
+    user_data = [[username]]
 
     print (values)
     print(email)
@@ -54,9 +55,23 @@ def main(email):
     string_list = list(map(string_sublist, values))
     print(string_list)
 
+    new_status = [["Na Comunidade"]]
+    
     if values:
         if email in string_list:
+            position = string_list.index(email) + 2
+            SAMPLE_RANGE_NAME_WRITE_STATUS = "WorkSheet!G{}".format(position)
+            status = (
+              sheet.values()
+              .update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME_WRITE_STATUS, valueInputOption = "USER_ENTERED", body={"values": new_status}).execute()
+          )
+            SAMPLE_RANGE_NAME_WRITE_USERNAME = "WorkSheet!H{}".format(position)
+            user_api = (
+              sheet.values()
+              .update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME_WRITE_USERNAME, valueInputOption = "USER_ENTERED", body={"values": user_data}).execute()
+          )
             print("SEU EMAIL ESTÁ CADASTRADO")
+            print(f"O email está na posição {position}.")
             #gravar na tabela!!
             return True
         else:
@@ -64,7 +79,6 @@ def main(email):
             return False
     else:
         print("Nenhum dado retornado.")
-    
   except HttpError as err:
     print(err)
 
@@ -72,5 +86,3 @@ def main(email):
 
 if __name__ == "__main__":
   main()
-
-# pegar o index + 1 para acrescentar o número da linha.

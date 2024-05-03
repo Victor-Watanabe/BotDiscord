@@ -11,10 +11,12 @@ class email_form(discord.ui.Modal):
 
     email_input = discord.ui.TextInput(label="Email", placeholder="Exemplo: Exemplo@gmail.com", custom_id="email_field")
     async def on_submit(self, interect:discord.Interaction):
+        global user
         user = interect.user
         global email
         email = self.email_input.value
-        reply = main(email)
+        username = user.name
+        reply = main(email, username)
         if reply == False:
             await interect.response.send_message(f"Senhor {user}, o email {email} NÃO foi localizado no banco de dados, Favor entre em contato com o nosso canal de Suporte!", ephemeral = True)
         else:
@@ -89,6 +91,6 @@ async def on_ready():
 # Identificando o Bot com o Token de Acesso e Colocando o bot para funcionar!
 bot.run("MTIzMDYwMDE2NDg0MzE5MjM1NQ.Gix1Vw.gFCOcnfI2pVzLNOOE2YaKssvCfUo-0KPG4xJXs")
 
-# Estudar como utilizar a API do google Sheets
+# idex + 2 para preencher item!
 # LEMBRAR DE ALTERAR TODOS OS ID DE COMANDO 
 # ORIENTAR O LUCAS DE COLOCAR OS CARGOS EM ORDEM DE DOMINIO!
