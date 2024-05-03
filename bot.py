@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.ui import Button
-from google_sheet import main
+from google_sheet import main, secondary
 
 
 # Lógica do Formulário de Email
@@ -82,7 +82,16 @@ async def on_member_join(member: discord.Member):
     # Adicionando a visualização com o botão à mensagem de boas-vindas
     view = await button(channel)  # Chamando a função button para obter a visualização
     await channel.send(files= [image_author, image_thumbnail], embed=my_embed, view=view)  # Enviando a mensagem com o embed e a visualização
+
+# alterando status do usuário no banco de dados
+@bot.event
+async def on_member_remove(member: discord.Member):
+    name = member.name
+    response = secondary(name)
+    pass
+    # FUNÇÃO PARA TORNAR AUSENTE!
     
+
 # Enviando uma Mensagem Sempre que o Bot for Inicializado!
 @bot.event
 async def on_ready():
@@ -91,6 +100,6 @@ async def on_ready():
 # Identificando o Bot com o Token de Acesso e Colocando o bot para funcionar!
 bot.run("MTIzMDYwMDE2NDg0MzE5MjM1NQ.Gix1Vw.gFCOcnfI2pVzLNOOE2YaKssvCfUo-0KPG4xJXs")
 
-# idex + 2 para preencher item!
+
 # LEMBRAR DE ALTERAR TODOS OS ID DE COMANDO 
 # ORIENTAR O LUCAS DE COLOCAR OS CARGOS EM ORDEM DE DOMINIO!
