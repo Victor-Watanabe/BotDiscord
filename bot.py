@@ -24,7 +24,6 @@ class email_form(discord.ui.Modal):
             
             await user.add_roles(role)
             await interect.response.send_message(f"Senhor {user}, seu Cadastro foi Concluído, Bem Vindo a Nossa Comunidade!", ephemeral = True)
-        print(reply)
 
 intents = discord.Intents.default()
 

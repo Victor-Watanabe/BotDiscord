@@ -12,6 +12,10 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 SAMPLE_SPREADSHEET_ID = "18kaJLF0OBLkMNS9fKx4Q_HPYQZ37So91-NXr7WURL2c"
 SAMPLE_RANGE_NAME = "WorkSheet!C2:C"
 
+other_status = [["Ausente"]]
+new_status = [["Na Comunidade"]]
+old_status = ['Na Comunidade']
+
 def string_sublist(sublist):
       return ' '.join(map(str, sublist))
 
@@ -48,13 +52,21 @@ def main(email, username):
     
     # Mapear cada sublista para uma string usando map
     string_list = list(map(string_sublist, values))
-
-    new_status = [["Na Comunidade"]]
-    
+     
     if values:
         if email in string_list:
-            position = string_list.index(email) + 2
-            SAMPLE_RANGE_NAME_WRITE_STATUS = "WorkSheet!G{}".format(position)
+          position = string_list.index(email) + 2
+          SAMPLE_RANGE_NAME_WRITE_STATUS = "WorkSheet!G{}".format(position)
+          result_status = (
+              sheet.values()
+              .get(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME_WRITE_STATUS)
+              .execute()
+          )
+          values_status = result_status.get("values", [])
+          status_list = list(map(string_sublist, values_status)) 
+          if old_status == status_list:
+            return False
+          else:
             status = (
               sheet.values()
               .update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME_WRITE_STATUS, valueInputOption = "USER_ENTERED", body={"values": new_status}).execute()
@@ -108,10 +120,7 @@ def secondary (name):
       
     # Mapear cada sublista para uma string usando map
     string_list = list(map(string_sublist, values))
-    print(string_list)
-
-    other_status = [["Ausente"]]
-    
+   
     if values:
         if name in string_list:
             position = string_list.index(name) + 2
@@ -120,8 +129,6 @@ def secondary (name):
               sheet.values()
               .update(spreadsheetId=SAMPLE_SPREADSHEET_ID, range=SAMPLE_RANGE_NAME_WRITE_STATUS, valueInputOption = "USER_ENTERED", body={"values": other_status}).execute()
           )
-            print(f"O {name} se tornou ausente!")
-
         else:
             pass
     else:
